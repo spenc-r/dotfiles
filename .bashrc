@@ -119,4 +119,30 @@ fi
 # Vi mode
 set -o vi
 
-export PS1="\e[1;36m[\d \t \u \w]\e[m$ "
+#export PS1="\e[1;36m[\d \t \u \w]\e[m$ "
+
+# [Prompt Command] -----------------------
+# Taken from https://stackoverflow.com/questions/16715103/bash-prompt-with-the-last-exit-code
+PROMPT_COMMAND=__prompt_command    # Function to generate PS1 after CMDs
+
+__prompt_command() {
+    local EXIT="$?"                # This needs to be first
+    PS1=""
+
+    local RCol='\[\e[0m\]'
+
+    local Red='\[\e[0;31m\]'
+    local Gre='\[\e[0;32m\]'
+    local BYel='\[\e[1;33m\]'
+    local BBlu='\[\e[1;34m\]'
+    local Pur='\[\e[0;35m\]'
+
+    if [ $EXIT != 0 ]; then
+        PS1+="${Red}\u${RCol}"        # Add red if exit code non 0
+    else
+        PS1+="${Gre}\u${RCol}"
+    fi
+
+    PS1+="${RCol}@${BBlu}\h ${Pur}\W${BYel}$ ${RCol}"
+}
+# ----------------------------------
